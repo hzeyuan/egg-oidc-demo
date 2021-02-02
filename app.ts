@@ -1,6 +1,7 @@
 
 import { Application } from 'egg';
-import MyAdapter from './adapters/adapter';
+// import SequelizeAdapter from './adapters/sequelize';
+import * as path from 'path';
 const helmet = require('koa-helmet');
 const Provider = require('oidc-provider');
 const mount = require('koa-mount');
@@ -39,7 +40,16 @@ class AppBootHook {
     // 所有的插件都已启动完毕，但是应用整体还未 ready
     // 可以做一些数据初始化等操作，这些操作成功才会启动应用
     // adapter: MyAdapter,
-    const provider = new Provider(ISSUER, { ...configuration });
+    let adapter;
+    try {
+      adapter = require('./adapters/sequelize');
+      await adapter.connect();
+    } catch (e) {
+      app.logger.error('database connect error ==>', e);
+    }
+
+    const provider = new Provider(ISSUER, { ...configuration, adapter });
+    // await provider.initialize({ adapter: SequelizeAdapter });
     // const c = provider.clientAdd({
     //   client_id: '2',
     //   client_secret: '2',

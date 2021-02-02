@@ -1,5 +1,6 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 import * as path from 'path';
+import { Context } from 'egg';
 export default (appInfo: EggAppInfo) => {
   const config = {} as PowerPartial<EggAppConfig>;
 
@@ -22,13 +23,15 @@ export default (appInfo: EggAppInfo) => {
       ignore: () => true,
     },
   };
+
   config.oidcProvider = {
+   
     clients: [
       {
         client_id: '1',
         client_secret: '1',
-        grant_types: [ 'refresh_token', 'authorization_code' ],
-        redirect_uris: [ 'http://127.0.0.1:5500/app/view/app1.html', 'http://127.0.0.1:5500/app/view/app2.html' ],
+        grant_types: ['refresh_token', 'authorization_code'],
+        redirect_uris: ['http://127.0.0.1:7001/app1', 'http://127.0.0.1:7001/app2'],
       },
     ],
     interactionUrl(ctx) {
@@ -43,10 +46,11 @@ export default (appInfo: EggAppInfo) => {
     cookies: {
       long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
       short: { signed: true },
-      keys: [ 'some secret key', 'and also the old rotated away some time ago', 'and one more' ],
+      keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
     },
-    findAccount: (ctx, sub, token) => {
+    findAccount: (ctx: Context, sub, token) => {
       console.log('findAccount==>', sub);
+      // ctx.app.oidcProvider.adapter
       // @param ctx - koa request context
       // @param sub {string} - account identifier (subject)
       // @param token - is a reference to the token used for which a given account is being loaded,
@@ -69,18 +73,22 @@ export default (appInfo: EggAppInfo) => {
       };
     },
     claims: {
-      address: [ 'address' ],
-      email: [ 'email', 'email_verified' ],
-      phone: [ 'phone_number', 'phone_number_verified' ],
-      profile: [ 'birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name', 'name',
-        'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo' ],
+      address: ['address'],
+      email: ['email', 'email_verified'],
+      phone: ['phone_number', 'phone_number_verified'],
+      profile: ['birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name', 'name',
+        'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo'],
     },
     features: {
       devInteractions: { enabled: false }, // defaults to true
-
+      // ietfJWTAccessTokenProfile: { enabled: true },
       deviceFlow: { enabled: true }, // defaults to false
-      introspection: { enabled: true }, // defaults to false
+      introspection: { enabled: false }, // defaults to false
       revocation: { enabled: true }, // defaults to false
+      // sessionManagement: {
+      //   enabled: true,
+      //   keepHeaders: false,
+      // },
     },
     jwks: {
       keys: [

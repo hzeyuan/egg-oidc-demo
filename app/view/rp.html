@@ -1,0 +1,35 @@
+<html>
+   <!-- <meta http-equiv="Content-Security-Policy" content="default-src https://cdn.example.net; child-src 'none'; object-src 'none'"> -->
+    <script>
+        var stat = 'unchanged';
+        var url = new URL(window.parent.location);
+        // 这里的 '1' 是我们的 client_id，之前在 node-oidc-provider 中填写的
+        var mes = '1' + ' ' + url.searchParams.get('session_state');
+        console.log('mes: ')
+        console.log(mes)
+        function check_session() {
+          var targetOrigin = 'http://127.0.0.1:7001';
+          var win = window.parent.document.getElementById('op').contentWindow;
+          win.postMessage(mes, targetOrigin);
+        }
+      
+        function setTimer() {
+          check_session();
+          timerID = setInterval('check_session()', 3 * 1000);
+        }
+      
+        window.addEventListener('message', receiveMessage, false);
+        setTimer()
+        function receiveMessage(e) {
+          console.log(e.data);
+          var targetOrigin = 'http://127.0.0.1:7001';
+          if (e.origin !== targetOrigin) {
+            return;
+          }
+          stat = e.data;
+          if (stat == 'changed') {
+            console.log('should log out now!!');
+          }
+        }
+      </script>
+</html>

@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src https://cdn.example.net; child-src 'none'; object-src 'none'">
     <title>第222个应用</title>
   </head>
   <body>
-    <a href="http://localhost:7001/auth?client_id=1&redirect_uri=http://127.0.0.1:5500/app/view/app2.html&scope=openid profile&response_type=code&state=455356436">登录</a>
+    
+    <iframe src="rp.html" hidden></iframe>
+    <iframe src="http://127.0.0.1:7001/session/check" id="op" hidden></iframe>
+    <a href="http://127.0.0.1:7001/auth?client_id=1&redirect_uri=http://127.0.0.1:7001/app2&scope=openid profile&response_type=code&state=455356436">登录</a>
   </body>
 </html>
