@@ -5,8 +5,6 @@ export default class InteractionController extends Controller {
   public async grant() {
     const { ctx } = this;
     const { oidcProvider } = this.app;
-    const details = await oidcProvider.interactionDetails(ctx.req, ctx.res);
-    console.log('d', details);
     const {
       uid, prompt, params, session,
     } = await oidcProvider.interactionDetails(ctx.req, ctx.res);

@@ -25,13 +25,13 @@ export default (appInfo: EggAppInfo) => {
   };
 
   config.oidcProvider = {
-   
+
     clients: [
       {
         client_id: '1',
         client_secret: '1',
-        grant_types: ['refresh_token', 'authorization_code'],
-        redirect_uris: ['http://127.0.0.1:7001/app1', 'http://127.0.0.1:7001/app2'],
+        grant_types: [ 'refresh_token', 'authorization_code' ],
+        redirect_uris: [ 'http://127.0.0.1:7001/app1', 'http://127.0.0.1:7001/app2' ],
       },
     ],
     interactionUrl(ctx) {
@@ -46,7 +46,7 @@ export default (appInfo: EggAppInfo) => {
     cookies: {
       long: { signed: true, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
       short: { signed: true },
-      keys: ['some secret key', 'and also the old rotated away some time ago', 'and one more'],
+      keys: [ '111111' ],
     },
     findAccount: (ctx: Context, sub, token) => {
       console.log('findAccount==>', sub);
@@ -72,13 +72,13 @@ export default (appInfo: EggAppInfo) => {
         },
       };
     },
-    claims: {
-      address: ['address'],
-      email: ['email', 'email_verified'],
-      phone: ['phone_number', 'phone_number_verified'],
-      profile: ['birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name', 'name',
-        'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo'],
-    },
+    // claims: {
+    //   address: [ 'address' ],
+    //   email: [ 'email', 'email_verified' ],
+    //   phone: [ 'phone_number', 'phone_number_verified' ],
+    //   profile: [ 'birthdate', 'family_name', 'gender', 'given_name', 'locale', 'middle_name', 'name',
+    //     'nickname', 'picture', 'preferred_username', 'profile', 'updated_at', 'website', 'zoneinfo' ],
+    // },
     features: {
       devInteractions: { enabled: false }, // defaults to true
       // ietfJWTAccessTokenProfile: { enabled: true },
